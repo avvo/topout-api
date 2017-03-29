@@ -17,12 +17,12 @@ defmodule ScoringApi.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    post "/user_activity", UserActivityController, :post
-    resources "/user_scores", UserScoreController
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ScoringApi do
-  #   pipe_through :api
-  # end
+  scope "/api", ScoringApi do
+    pipe_through :api
+    post "/user_activity", UserActivityController, :post
+    resources "/user_scores", UserScoresController
+  end
 end

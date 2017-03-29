@@ -2,7 +2,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/topout-api
+    working_directory: ~/topout_api
 
     docker:
       - image: avvo/elixir-circleci:1.4.1-2

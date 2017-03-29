@@ -6,3 +6,5 @@
 **/.secret.exs
 /tarballs
 *.tar.gz
+.idea/
+*.iml

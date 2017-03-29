@@ -25,7 +25,7 @@ defmodule TopoutApi.Mixfile do
   # and cannot be accessed from applications inside the apps folder
   defp deps do
     [
-	{ :mix_docker, "~> 0.3.0" }
+      { :mix_docker, "~> 0.3.0" }
     ]
   end
 end

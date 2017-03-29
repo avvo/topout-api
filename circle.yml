@@ -1,0 +1,68 @@
+---
+version: 2
+jobs:
+  build:
+    working_directory: ~/topout-api
+
+    docker:
+      - image: avvo/elixir-circleci:1.4.1-2
+
+    environment:
+      MIX_ENV: test
+      KAFKA_HOSTS: 127.0.0.1:9092
+      SALESFORCE_USERNAME: TODO
+      SALESFORCE_PASSWORD: TODO
+      SALESFORCE_SECURITY_TOKEN: TODO
+      SALESFORCE_CLIENT_ID: TODO
+      SALESFORCE_CLIENT_SECRET: TODO
+
+    steps:
+      - checkout
+      - run: git submodule sync && git submodule update --init
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "mix.lock" }}
+
+      - run: mix do deps.get, deps.compile, compile
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "mix.lock" }}
+          paths:
+            - _build
+            - deps
+
+      - run:
+          name: Run Tests
+          command: mix test
+
+      - store_test_results:
+          path: ~/topout-api/_build/test/lib
+
+      # all steps after this run in the remote environment
+      - type: setup-docker-engine
+        reusable: true
+
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+
+      - run:
+          name: Build docker image
+          command: bin/build.sh
+      - run:
+          name: Publish container tagged with branch
+          command: |
+            docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+            docker push avvo/topout-api:$CIRCLE_BRANCH
+      - run:
+          name: Publish latest if master
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker tag avvo/topout-api:release avvo/topout-api:latest
+              docker push avvo/topout-api:latest
+            fi

@@ -1,0 +1,9 @@
+.git
+._build
+cover
+dock
+test
+tmp
+erl_crash.dump
+*.ez
+

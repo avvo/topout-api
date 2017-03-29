@@ -1,0 +1,14 @@
+FROM avvo/elixir-release:3.5-1
+
+EXPOSE 4098
+ENV PORT=4098 MIX_ENV=prod REPLACE_OS_VARS=true SHELL=/bin/sh
+
+WORKDIR /opt/app
+
+ARG SOURCE_COMMIT=0
+ENV COMMIT_HASH $SOURCE_COMMIT
+
+ADD topout_api.tar.gz ./
+
+ENTRYPOINT ["/opt/app/bin/topout-api"]
+CMD ["foreground"]

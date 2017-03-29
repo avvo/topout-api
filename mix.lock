@@ -1,0 +1,2 @@
+%{"distillery": {:hex, :distillery, "1.1.2", "4cf32ecc70ca7eecca9e52e111edf320bd78011050825863cd8bc7ffee686c5d", [:mix], []},
+  "mix_docker": {:hex, :mix_docker, "0.3.2", "30491c340b95161c354456cbfc3d2627d088b9a244c99a0fca28b678a52401a6", [:mix], [{:distillery, "~> 1.1.0", [hex: :distillery, optional: false]}]}}

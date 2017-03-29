@@ -9,12 +9,6 @@ jobs:
 
     environment:
       MIX_ENV: test
-      KAFKA_HOSTS: 127.0.0.1:9092
-      SALESFORCE_USERNAME: TODO
-      SALESFORCE_PASSWORD: TODO
-      SALESFORCE_SECURITY_TOKEN: TODO
-      SALESFORCE_CLIENT_ID: TODO
-      SALESFORCE_CLIENT_SECRET: TODO
 
     steps:
       - checkout

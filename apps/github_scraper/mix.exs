@@ -40,7 +40,9 @@ defmodule GithubScraper.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-        {:quantum, ">= 1.9.1"}
+        {:quantum, ">= 1.9.1"},
+        {:httpoison, "~>0.11"},
+        {:poison, "~>2.0"}
     ]
   end
 end

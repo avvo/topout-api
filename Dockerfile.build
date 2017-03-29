@@ -23,6 +23,12 @@ RUN mkdir -p \
 
 ENV MIX_ENV=prod
 
+# Elixir likes it this way.
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 # Cache elixir deps
 COPY mix.exs mix.lock ./
 COPY config ./config

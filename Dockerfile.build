@@ -2,6 +2,12 @@ FROM bitwalker/alpine-erlang:latest
 
 ENV HOME=/opt/app/ TERM=xterm
 
+# Elixir requires UTF-8
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 # Install Elixir and basic build dependencies
 RUN \
     echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
@@ -22,12 +28,6 @@ RUN mkdir -p \
   apps/scoring_api
 
 ENV MIX_ENV=prod
-
-# Elixir likes it this way.
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
 
 # Cache elixir deps
 COPY mix.exs mix.lock ./

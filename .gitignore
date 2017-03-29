@@ -8,3 +8,6 @@
 *.tar.gz
 .idea/
 *.iml
+
+!rel/config.exs
+

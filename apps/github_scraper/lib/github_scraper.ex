@@ -15,4 +15,9 @@ defmodule GithubScraper do
   def hello do
     :world
   end
+
+  def scrape do
+    IO.puts "Success!"
+    :ok
+  end
 end

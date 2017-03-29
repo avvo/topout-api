@@ -8,6 +8,7 @@ use Mix.Config
 # configure all applications here, we prefer to delegate
 # back to each application for organization purposes.
 import_config "../apps/*/config/config.exs"
+config :mix_docker, image: "avvo/topout-api"
 
 # Sample configuration (overrides the imported configuration above):
 #

@@ -10,4 +10,4 @@
 *.iml
 
 !rel/config.exs
-
+.DS_Store

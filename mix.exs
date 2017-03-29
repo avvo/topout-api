@@ -4,7 +4,7 @@ defmodule TopoutApi.Mixfile do
   def project do
     [
      app: :topout_api,
-     version: "0.0.1",
+     version: "0.1.0",
      apps_path: "apps",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,

@@ -55,7 +55,10 @@ config :logger, level: :info
 #
 #     config :scoring_api, ScoringApi.Endpoint, server: true
 #
+config :scoring_api, ScoringApi.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: "${DB_USER}",
+  password: "${DB_PASS}",
+  database: "scoring_api_prod",
+  pool_size: 20
 
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"

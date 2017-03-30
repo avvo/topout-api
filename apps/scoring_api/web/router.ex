@@ -25,5 +25,6 @@ defmodule ScoringApi.Router do
 #    post "/user_activity", UserActivityController, :post
 #    resources "/user_scores", UserScoresController
     resources "/commits", GithubCommitController
+    get "/leaderboard_summary", LeaderBoardSummaryController, :index
   end
 end

@@ -24,5 +24,6 @@ defmodule ScoringApi.Router do
     pipe_through :api
     post "/user_activity", UserActivityController, :post
     resources "/user_scores", UserScoresController
+    resources "/user_things", UserThingController, except: [:new, :edit]
   end
 end

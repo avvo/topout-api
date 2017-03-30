@@ -58,7 +58,6 @@ config :logger, level: :info
 config :scoring_api, ScoringApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "}",
   database: "postgres",
   hostname: "postgres",
   pool_size: 20

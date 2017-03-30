@@ -22,7 +22,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "mix.lock" }}
 
-      - run: mix do deps.get, deps.compile, compile
+      - run: mix do deps.get, deps.compile, compile, ecto.migrate
 
       - save_cache:
           key: dependency-cache-{{ checksum "mix.lock" }}

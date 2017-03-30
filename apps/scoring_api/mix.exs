@@ -17,13 +17,20 @@ defmodule ScoringApi.Mixfile do
      deps: deps()]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
   def application do
-    [mod: {ScoringApi, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+    [
+      mod: {ScoringApi, []},
+      applications: [
+        :cowboy,
+        :gettext,
+        :logger,
+        :phoenix,
+        :phoenix_ecto,
+        :phoenix_html,
+        :phoenix_pubsub,
+        :postgrex
+      ]
+    ]
   end
 
   # Specifies which paths to compile per environment.
@@ -44,12 +51,6 @@ defmodule ScoringApi.Mixfile do
      {:cowboy, "~> 1.0"}]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to create, migrate and run the seeds file at once:
-  #
-  #     $ mix ecto.setup
-  #
-  # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],

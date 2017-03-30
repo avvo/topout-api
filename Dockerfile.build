@@ -37,7 +37,7 @@ COPY deps ./deps
 
 COPY apps/scoring_api/config ./apps/scoring_api/config
 
-RUN mix do deps.get, deps.compile
+RUN mix do deps.get, deps.compile, ecto.migrate
 
 COPY . .
 

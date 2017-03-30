@@ -36,8 +36,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :scoring_api, ScoringApi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "topout",
-  password: "topout",
+  username: "postgres",
+  password: "postgres",
   database: "scoring_api_dev",
   hostname: "localhost",
   pool_size: 10

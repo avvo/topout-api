@@ -22,7 +22,8 @@ defmodule ScoringApi.Router do
   # Other scopes may use custom stacks.
   scope "/api", ScoringApi do
     pipe_through :api
-    post "/user_activity", UserActivityController, :post
-    resources "/user_scores", UserScoresController
+#    post "/user_activity", UserActivityController, :post
+#    resources "/user_scores", UserScoresController
+    resources "/commits", GithubCommitController
   end
 end

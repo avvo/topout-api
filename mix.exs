@@ -13,8 +13,7 @@ defmodule TopoutApi.Mixfile do
 
   defp deps do
     [
-      { :mix_docker, "~> 0.3.0" },
-      {:phoenix_ecto, "~> 3.0"}
+      { :mix_docker, "~> 0.3.0" }
     ]
   end
 end

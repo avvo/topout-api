@@ -6,25 +6,19 @@ defmodule GithubScraper do
   use Http.Base
 
   @endpoint "https://api.github.com/graphql"
-#  @testquery "{query: { viewer { login CarsonStauffer } }}"
-#    @testquery '{"query": "{ viewer { login name } }"}'
-    @testquery '{query:{organization(login:\"avvo\"){repositories(first: 15){edges{node{name}}}}}}'
-
-
-  @body @testquery
 
   defp headers(token), do: ["Authorization": "Bearer #{token}"]
+
+  defp viewer_query, do: "{viewer{login}}"
 
   defp commits_query(org_name \\ "avvo", repos_cnt \\ 15) do
     """
       {
-        query: {
-          organization(login:"#{org_name}") {
-            repositories(first: #{repos_cnt}) {
-              edges {
-                node {
-                  name
-                }
+        organization(login: "#{org_name}") {
+          repositories(first: #{repos_cnt}) {
+            edges {
+              node {
+                name
               }
             }
           }
@@ -33,12 +27,10 @@ defmodule GithubScraper do
     """
   end
 
-  defp viewer_query, do: "{viewer{login}}"
-
-  # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN defined which contains
-  #          a valid github access token or this will fail
+  # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN
+  # defined which contains a valid github access token or this will fail
   def scrape() do
-    query = viewer_query()
+    query = commits_query()
     case post_query(query) do
       {:ok, %Http.Response{status_code: 200, body: body}} ->
         body

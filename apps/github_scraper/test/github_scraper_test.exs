@@ -2,7 +2,9 @@ defmodule GithubScraperTest do
   use ExUnit.Case
   doctest GithubScraper
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  describe "scrape" do
+    test "returns results successfully" do
+      assert :ok == GithubScraper.scrape
+    end
   end
 end

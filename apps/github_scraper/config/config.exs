@@ -1,8 +1,10 @@
 use Mix.Config
 
-import_config "#{Mix.env}.exs"
-
 config :quantum, :github_scraper,
   cron: [
-    "* * * * *":      &GithubScraper.scrape/0
+    "* * * * *": &GithubScraper.scrape/0
   ]
+
+config :ex_github, access_token: System.get_env("GITHUB_ACCESS_TOKEN")
+
+import_config "#{Mix.env}.exs"

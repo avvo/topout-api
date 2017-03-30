@@ -10,5 +10,5 @@ ENV COMMIT_HASH $SOURCE_COMMIT
 
 ADD topout_api.tar.gz ./
 
-ENTRYPOINT ["/opt/app/bin/topout-api"]
+ENTRYPOINT ["/opt/app/bin/topout_api"]
 CMD ["foreground"]

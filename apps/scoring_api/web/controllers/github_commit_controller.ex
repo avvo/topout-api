@@ -8,6 +8,27 @@ defmodule ScoringApi.GithubCommitController do
     render(conn, "index.json", github_commits: github_commits)
   end
 
+  def create(conn, %{"github_commits" => []}) do
+    render(conn, "index.json", github_commits: [])
+  end
+
+  def create(conn, %{"github_commits" => [_|_] = github_commit_params}) do
+    insert_commit = fn(github_commit) ->
+      changeset = GithubCommit.changeset(%GithubCommit{}, github_commit)
+      case Repo.insert(changeset) do
+        {:ok, github_commit} -> github_commit
+        {:error, _} -> nil
+      end
+    end
+
+    result = (github_commit_params
+    |> Enum.map(insert_commit)
+    |> IO.inspect()
+    |> Enum.reject(fn(insert_results) -> is_nil(insert_results) end))
+
+    render(conn, "index.json", github_commits: result)
+  end
+
   def create(conn, %{"github_commit" => github_commit_params}) do
     changeset = GithubCommit.changeset(%GithubCommit{}, github_commit_params)
 

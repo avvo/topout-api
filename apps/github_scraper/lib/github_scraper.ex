@@ -6,8 +6,6 @@ defmodule GithubScraper do
   use Http.Base
 
   @endpoint "https://api.github.com/graphql"
-#  @testquery "{query: { viewer { login CarsonStauffer } }}"
-#    @testquery '{"query": "{ viewer { login name } }"}'
     @testquery '{query:{organization(login:\"avvo\"){repositories(first: 15){edges{node{name}}}}}}'
 
 

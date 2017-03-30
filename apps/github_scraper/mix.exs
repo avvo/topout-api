@@ -21,7 +21,7 @@ defmodule GithubScraper.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
         extra_applications: [:logger],
-        applications: [:quantum]
+        applications: [:quantum, :graphql]
     ]
   end
 
@@ -42,7 +42,8 @@ defmodule GithubScraper.Mixfile do
     [
         {:quantum, ">= 1.9.1"},
         {:httpoison, "~>0.11"},
-        {:poison, "~>2.0"}
+        {:poison, "~>2.0"},
+        {:graphql, "~> 0.1.1"}
     ]
   end
 end

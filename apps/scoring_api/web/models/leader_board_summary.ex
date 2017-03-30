@@ -3,7 +3,7 @@ defmodule ScoringApi.LeaderBoardSummary do
 
   schema "leader_board_summary" do
     field :display_name, :string
-    field :count, :integer
+    field :score, :integer
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule ScoringApi.LeaderBoardSummary do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:display_name, :count])
-    |> validate_required([:display_name, :count])
+    |> cast(params, [:display_name, :score])
+    |> validate_required([:display_name, :score])
   end
 end

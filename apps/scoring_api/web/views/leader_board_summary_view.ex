@@ -12,6 +12,6 @@ defmodule ScoringApi.LeaderBoardSummaryView do
   def render("leader_board_summary.json", %{leader_board_summary: leader_board_summary}) do
     %{id: leader_board_summary.id,
       display_name: leader_board_summary.display_name,
-      count: leader_board_summary.count}
+      score: leader_board_summary.score}
   end
 end

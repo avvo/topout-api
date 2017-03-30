@@ -3,7 +3,7 @@ defmodule ScoringApi.LeaderBoardSummaryTest do
 
   alias ScoringApi.LeaderBoardSummary
 
-  @valid_attrs %{count: 42, display_name: "some content"}
+  @valid_attrs %{score: 42, display_name: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

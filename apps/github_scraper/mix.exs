@@ -42,7 +42,8 @@ defmodule GithubScraper.Mixfile do
     [
         {:quantum, ">= 1.9.1"},
         {:httpoison, "~>0.11"},
-        {:poison, "~>2.0"}
+        {:poison, "~>2.0"},
+        {:scoring_api, in_umbrella: true}
     ]
   end
 end

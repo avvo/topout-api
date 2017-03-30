@@ -142,7 +142,7 @@ defmodule GithubScraper do
   ) do
     case commit_user do
       %{"id" => id} ->
-        %Commit{
+        %ScoringApi.GithubCommit{
           commit_id: commit_id,
           display_name: nil,
           email: nil,

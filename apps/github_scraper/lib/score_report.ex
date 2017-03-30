@@ -19,7 +19,8 @@ defmodule ScoreReport do
     ]
   end
 
-  def submit() do
+  def submit(commits) do
+   commits |> inspect(pretty: true) |> IO.puts
     # TODO call scoring API
   end
 end

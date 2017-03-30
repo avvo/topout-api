@@ -114,29 +114,32 @@ defmodule GithubScraper do
     |> Enum.reduce([], &do_repo_edge(&1, &2))
   end
 
-  defp do_repo_edge(repo_edge, acc) do
-    repo_node = repo_edge["node"]
-    repo_name = repo_node["name"]
-    branch_edges = repo_node["refs"]["edges"]
+  defp do_repo_edge(
+    %{"node" => %{"name" => repo_name, "refs" => %{"edges" => branch_edges}}},
+    acc
+  ) do
     branch_edges
     |> Enum.reduce(acc, &do_branch_edge(&1, &2, repo_name))
   end
 
-  defp do_branch_edge(branch_edge, acc, repo_name) do
-    branch_node = branch_edge["node"]
-    commit_edges = branch_node["target"]["history"]["edges"]
+  defp do_branch_edge(
+    %{"node" => %{"target" => %{"history" => %{"edges" => commit_edges}}}},
+    acc,
+    repo_name
+  ) do
     commit_edges
-    |> Enum.reduce(acc, fn(commit, acc) ->
-      accumulate_commit(create_commit(commit, repo_name), acc)
+    |> Enum.reduce(acc, fn(commit_edge, acc) ->
+      accumulate_commit(create_commit(commit_edge, repo_name), acc)
     end)
   end
 
   defp accumulate_commit(nil, acc), do: acc
   defp accumulate_commit(commit, acc), do: [commit | acc]
 
-  defp create_commit(commit_edge, repo_name) do
-    commit_node = commit_edge["node"]
-    commit_user = commit_node["author"]["user"]
+  defp create_commit(
+    %{"node" => commit_node = %{"author" => %{"user" => commit_user}}},
+    repo_name
+  ) do
     case commit_user do
       %{"id" => id} ->
         %Commit{

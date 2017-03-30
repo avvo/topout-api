@@ -90,7 +90,7 @@ defmodule GithubScraper do
 
   defp post_query(query) do
     with \
-      token <- Application.get_env(:ex_github, :access_token),
+      token <- System.get_env("GITHUB_ACCESS_TOKEN"),
       {:ok, body} <- %{query: query} |> Json.encode \
     do
       IO.puts("QUERY: #{ip query}")

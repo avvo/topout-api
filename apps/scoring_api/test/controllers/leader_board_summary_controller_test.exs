@@ -11,7 +11,7 @@ defmodule ScoringApi.LeaderBoardSummaryControllerTest do
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, leader_board_summary_path(conn, :index)
-    assert json_response(conn, 200)["data"] == []
+    assert json_response(conn, 200)["data"] != []
   end
 
 end

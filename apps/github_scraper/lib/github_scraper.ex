@@ -137,13 +137,13 @@ defmodule GithubScraper do
   defp accumulate_commit(commit, acc), do: [commit | acc]
 
   defp create_commit(
-    %{"node" => commit_node = %{"author" => %{"user" => commit_user}}},
+    %{"node" => %{"id" => commit_id, "author" => %{"user" => commit_user}}},
     repo_name
   ) do
     case commit_user do
       %{"id" => id} ->
         %Commit{
-          commit_id: commit_node["id"],
+          commit_id: commit_id,
           display_name: nil,
           email: nil,
           github_id: id,

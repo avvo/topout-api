@@ -6,12 +6,15 @@ defmodule GithubScraper do
   use Http.Base
 
   @endpoint "https://api.github.com/graphql"
+  @max_edges 100
 
   defp headers(token), do: ["Authorization": "Bearer #{token}"]
 
+  defp edges_cnt(cnt \\ @max_edges), do: max(1, min(cnt, @max_edges))
+
   defp viewer_query, do: "{viewer{login}}"
 
-  defp commits_query(org_name \\ "avvo", repos_cnt \\ 15) do
+  defp repos_query(org_name \\ "avvo", repos_cnt \\ 15) do
     """
       {
         organization(login: "#{org_name}") {
@@ -26,6 +29,47 @@ defmodule GithubScraper do
       }
     """
   end
+
+  defp commits_query(org_name \\ "avvo", max_branches \\ @max_edges) do
+    """
+      {
+        organization(login: "#{org_name}") {
+          repositories(first: #{edges_cnt(3)}) {
+            edges {
+              node {
+                name
+                ... on Repository {
+                  refs(refPrefix: "refs/heads/", first: #{edges_cnt(max_branches)}) {
+                    edges {
+                      node {
+                        target {
+                          ... on Commit {
+                            history(first: #{edges_cnt(5)}) {
+                              edges {
+                                node {
+                                  author {
+                                    user {
+                                      id
+                                    }
+                                  }
+                                  id
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    """
+  end
+
 
   # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN
   # defined which contains a valid github access token or this will fail

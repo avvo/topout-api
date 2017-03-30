@@ -2,6 +2,7 @@ defmodule GithubScraper do
 
   alias HTTPoison, as: Http
   alias Poison, as: Json
+  alias ScoreReport.Commit
 
   use Http.Base
 
@@ -97,10 +98,51 @@ defmodule GithubScraper do
     end
   end
 
-  defp report_result(map) do
-    IO.puts("RESULT: #{ip map}")
-    # TODO: call scoring api
+  defp report_result(result_map) do
+    # TODO: convert result JSON to ScoreReport struct
+    IO.puts("RESULT: #{ip result_map}")
+    create_score_report(result_map) |> ip |> IO.puts
+    ScoreReport.submit
     :ok
+  end
+
+  defp create_score_report(result_map) do
+    repo_edges = result_map["data"]["organization"]["repositories"]["edges"]
+#    IO.puts("\n\n\n\nrepo_edges: #{ip repo_edges}")
+    repo_edges
+    |> Enum.map(&do_repo_edge(&1))
+  end
+
+  defp do_repo_edge(repo_edge) do
+    repo_node = repo_edge["node"]
+    repo_name = repo_node["name"]
+    branch_edges = repo_node["refs"]["edges"]
+    branch_edges
+    |> Enum.map(&do_branch_edge(&1, repo_name))
+  end
+
+  defp do_branch_edge(branch_edge, repo_name) do
+    branch_node = branch_edge["node"]
+    commit_edges = branch_node["target"]["history"]["edges"]
+    commit_edges
+    |> Enum.map(&create_commit(&1, repo_name))
+  end
+
+  defp create_commit(commit_edge, repo_name) do
+    commit_node = commit_edge["node"]
+    commit_user = commit_node["author"]["user"]
+    case commit_user do
+      %{"id" => id} ->
+        %Commit{
+          commit_id: commit_node["id"],
+          display_name: nil,
+          email: nil,
+          github_id: id,
+          repo: repo_name
+        }
+      _ ->
+        nil
+    end
   end
 
   defp report_unexpected(query, response) do

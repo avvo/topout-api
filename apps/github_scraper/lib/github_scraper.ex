@@ -50,7 +50,7 @@ defmodule GithubScraper do
                                 node {
                                   author {
                                     user {
-                                      id
+                                      databaseId
                                       name
                                       email
                                     }
@@ -143,12 +143,12 @@ defmodule GithubScraper do
     repo_name
   ) do
     case commit_user do
-      %{"id" => id} ->
+      %{"databaseId" => databaseId} ->
         %ScoringApi.GithubCommit{
           commit_id: commit_id,
           display_name: commit_user["name"],
           email: commit_user["email"],
-          github_id: id,
+          github_id: Integer.to_string(databaseId),
           repo: repo_name
         }
       _ ->

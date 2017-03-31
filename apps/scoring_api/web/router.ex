@@ -10,6 +10,7 @@ defmodule ScoringApi.Router do
   end
 
   pipeline :api do
+    plug Corsica, origins: "*", allow_methods: "GET"
     plug :accepts, ["json"]
   end
 
@@ -22,9 +23,8 @@ defmodule ScoringApi.Router do
   # Other scopes may use custom stacks.
   scope "/api", ScoringApi do
     pipe_through :api
-#    post "/user_activity", UserActivityController, :post
-#    resources "/user_scores", UserScoresController
     resources "/commits", GithubCommitController
     get "/leaderboard_summary", LeaderBoardSummaryController, :index
+    options "/leaderboard_summary", LeaderBoardSummaryController, :options
   end
 end

@@ -10,6 +10,8 @@ use Mix.Config
 import_config "../apps/*/config/config.exs"
 config :mix_docker, image: "avvo/topout-api"
 
+config :github_scraper, ecto_repos: []
+
 # Sample configuration (overrides the imported configuration above):
 #
 #     config :logger, :console,

@@ -50,7 +50,7 @@ defmodule GithubScraper do
                       node {
                         target {
                           ... on Commit {
-                            history(first: #{edges_cnt(5)}) {
+                            history(first: #{edges_cnt(100)}) {
                               edges {
                                 node {
                                   author {
@@ -78,20 +78,22 @@ defmodule GithubScraper do
     """
   end
 
-#    todo GithubScraper.iterative_scrape(0,100)
   def iterative_scrape(repositories_queried, total_repositories) when (total_repositories - repositories_queried) > 0 do
-#    IO.puts("\n\n\nrecursive version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
-    repositories_arguments = "last: 1"
-    scrape(@org_name, 2, repositories_arguments)
-    iterative_scrape(repositories_queried + 50, total_repositories) # TODO: make repositories_queried right!
+    step_size = 1
+    repositories_arguments = "first: #{step_size}"
+    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments)
+    iterative_scrape(repositories_queried + step_size, total_repositories, cursor)
+  end
+  def iterative_scrape(repositories_queried, total_repositories, cursor) when (total_repositories - repositories_queried) > 0 do
+    step_size = 3
+    repositories_arguments = "first: #{step_size}, after: \"#{cursor}\""
+    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments)
+    iterative_scrape(repositories_queried + step_size, total_repositories, cursor)
   end
 
-  def iterative_scrape(repositories_queried, total_repositories) do
+  def iterative_scrape(repositories_queried, total_repositories, cursor) do
 
   end
-
-
-
 
 
   # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN
@@ -124,8 +126,9 @@ defmodule GithubScraper do
     # TODO: convert result JSON to ScoreReport struct
     IO.puts("RESULT: #{ip result_map}")
     {cursor, acc} = create_commits(result_map)
+    ip cursor
     ScoreReport.submit(acc)
-    :ok
+    {:ok, cursor}
   end
 
   defp create_commits(
@@ -139,6 +142,8 @@ defmodule GithubScraper do
     %{"cursor" => cursor, "node" => %{"name" => repo_name, "refs" => %{"edges" => branch_edges}}},
     acc
   ) do
+    {_, arr} = acc
+    acc = {cursor, arr}
     Enum.reduce(branch_edges, acc, &do_branch_edge(&1, &2, repo_name))
   end
 

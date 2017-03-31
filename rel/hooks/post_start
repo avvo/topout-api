@@ -17,5 +17,5 @@ done
 
 set -e
 
-bin/topout_api rpc Elixir.Release.Tasks help ""
-bin/topout_api rpc Elixir.Release.Tasks migrate
+bin/topout_api rpc Elixir.Release.Tasks help "THIS SUCKS"
+bin/topout_api rpc Elixir.Release.Tasks migrate "SUCCESS"

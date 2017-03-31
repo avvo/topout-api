@@ -1,7 +1,7 @@
 defmodule Release.Tasks do
   @moduledoc false
   
-  def migrate do
+  def migrate(echo) do
     {:ok, _} = Application.ensure_all_started(:scoring_api)
 
     path = Application.app_dir(:scoring_api, "priv/repo/migrations")
@@ -10,7 +10,7 @@ defmodule Release.Tasks do
 
     Ecto.Migrator.run(ScoringApi.Repo, path, :up, all: true)
 
-    { :ok, "Looks like it worked" }
+    { :ok, echo }
   end
 
   def help(echo) do

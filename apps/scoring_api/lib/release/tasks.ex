@@ -9,7 +9,8 @@ defmodule Release.Tasks do
     Ecto.Migrator.run(ScoringApi.Repo, path, :up, all: true)
   end
 
-  def help do
-    IO.puts("This is a task to aid in running Ecto migrations.")
+  def help(echo) do
+    IO.puts("Hello from the ScoringApi Leaderboard Summary Controller: #{echo}")
+    echo
   end
 end

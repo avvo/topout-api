@@ -13,6 +13,5 @@ done
 
 set -e
 
-echo "Running migrations"
-bin/scoring_api rpc Elixir.Release.Tasks migrate
-echo "Migrations run successfully"
+bin/topout_api rpc Elixir.Release.Tasks help "Migrating"
+bin/topout_api rpc Elixir.Release.Tasks migrate "SUCCESS"

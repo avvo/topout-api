@@ -80,21 +80,15 @@ defmodule GithubScraper do
 
 #    todo GithubScraper.iterative_scrape(0,100)
   def iterative_scrape(repositories_queried, total_repositories) when (total_repositories - repositories_queried) > 0 do
-    IO.puts("\n\n\nrecursive version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
+#    IO.puts("\n\n\nrecursive version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
     repositories_arguments = "last: 1"
     scrape(@org_name, 2, repositories_arguments)
     iterative_scrape(repositories_queried + 50, total_repositories) # TODO: make repositories_queried right!
   end
 
   def iterative_scrape(repositories_queried, total_repositories) do
-    IO.puts("\n\n\nfinal version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
-#    repositories_arguments = "last: 1"
-#    scrape(@org_name, 2, repositories_arguments)
+
   end
-
-
-
-
 
 
 
@@ -129,9 +123,8 @@ defmodule GithubScraper do
   defp report_result(result_map) do
     # TODO: convert result JSON to ScoreReport struct
     IO.puts("RESULT: #{ip result_map}")
-    result_map
-    |> create_commits
-    |> ScoreReport.submit
+    {cursor, acc} = create_commits(result_map)
+    ScoreReport.submit(acc)
     :ok
   end
 
@@ -139,15 +132,14 @@ defmodule GithubScraper do
     %{"data" => %{"organization" => %{"repositories" => %{"edges" => repo_edges}}}}
   ) do
     repo_edges
-    |> Enum.reduce([], &do_repo_edge(&1, &2))
+    |> Enum.reduce({"", []}, &do_repo_edge(&1, &2))
   end
 
   defp do_repo_edge(
-    %{"node" => %{"name" => repo_name, "refs" => %{"edges" => branch_edges}}},
+    %{"cursor" => cursor, "node" => %{"name" => repo_name, "refs" => %{"edges" => branch_edges}}},
     acc
   ) do
-    branch_edges
-    |> Enum.reduce(acc, &do_branch_edge(&1, &2, repo_name))
+    Enum.reduce(branch_edges, acc, &do_branch_edge(&1, &2, repo_name))
   end
 
   defp do_branch_edge(
@@ -162,7 +154,8 @@ defmodule GithubScraper do
   end
 
   defp accumulate_commit(nil, acc), do: acc
-  defp accumulate_commit(commit, acc), do: [commit | acc]
+  defp accumulate_commit({cursor, commit}, {_, acc}), do: {cursor, [commit | acc]}
+  defp accumulate_commit(commit, {cursor, acc}), do: {cursor, [commit | acc]}
 
   defp create_commit(
     %{"node" => %{"id" => commit_id, "author" => %{"user" => commit_user}}},

@@ -9,7 +9,7 @@ defmodule GithubScraper do
   @endpoint "https://api.github.com/graphql"
   @max_edges 100
   @org_name "avvo"
-  @default_repositories_arguments "first: 3"
+  @default_repositories_arguments "last: 5, orderBy: {field:UPDATED_AT, direction:DESC}"
 
   defp headers(token), do: ["Authorization": "Bearer #{token}"]
 

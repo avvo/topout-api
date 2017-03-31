@@ -35,7 +35,7 @@ defmodule GithubScraper do
     """
       {
         organization(login: "#{org_name}") {
-          repositories(first: #{edges_cnt(3)}) {
+          repositories(last: #{edges_cnt(10)}, orderBy: {field:UPDATED_AT, direction:DESC}) {
             edges {
               node {
                 name

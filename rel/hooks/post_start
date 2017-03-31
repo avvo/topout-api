@@ -2,10 +2,6 @@
 
 set +e
 
-echo ------------------------------
-pwd
-echo ------------------------------
-
 while true; do
   nodetool ping
   EXIT_CODE=$?
@@ -17,5 +13,5 @@ done
 
 set -e
 
-bin/topout_api rpc Elixir.Release.Tasks help "ONEWORD"
+bin/topout_api rpc Elixir.Release.Tasks help "Migrating"
 bin/topout_api rpc Elixir.Release.Tasks migrate "SUCCESS"

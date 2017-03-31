@@ -7,13 +7,11 @@ defmodule ScoringApi.LeaderBoardSummaryController do
     # TODO: Make this perform a query against the github_commits table to calculate the real leaderboard
     # leader_board_summary = Repo.all(LeaderBoardSummary)
 
-    leader_board_summary = [
-      %{:id => 1, :display_name => "Adams", :score => 120},
-      %{:id => 1, :display_name => "Baker", :score => 97},
-      %{:id => 1, :display_name => "Glacier Peak", :score => 80},
-      %{:id => 1, :display_name => "Hood", :score => 127},
-      %{:id => 1, :display_name => "Shasta", :score => 7}
-    ]
+    leader_board_summary = ScoringApi.Repo.all(
+      from c in ScoringApi.GithubCommit, 
+        group_by: [:github_id, :display_name], 
+        select: {c.display_name, c.github_id, count(c.id)})
+      |> Enum.map(fn({display_name, id, score}) -> %{id: id, display_name: display_name, score: score} end)
 
     render(conn, "index.json", leader_board_summary: leader_board_summary)
   end

@@ -8,6 +8,8 @@ defmodule GithubScraper do
 
   @endpoint "https://api.github.com/graphql"
   @max_edges 100
+  @org_name "avvo"
+  @default_repositories_arguments "first: 3"
 
   defp headers(token), do: ["Authorization": "Bearer #{token}"]
 
@@ -31,12 +33,15 @@ defmodule GithubScraper do
     """
   end
 
-  defp commits_query(org_name \\ "avvo", max_branches \\ @max_edges) do
+#repositories(last: #{edges_cnt(10)}, orderBy: {field:UPDATED_AT, direction:DESC}) {
+  defp commits_query(org_name \\ @org_name, max_branches \\ @max_edges, repositories_arguments \\ @default_repositories_arguments) do
     """
       {
         organization(login: "#{org_name}") {
-          repositories(last: #{edges_cnt(10)}, orderBy: {field:UPDATED_AT, direction:DESC}) {
+          repositories(#{repositories_arguments}) {
+            totalCount
             edges {
+              cursor
               node {
                 name
                 ... on Repository {
@@ -73,11 +78,32 @@ defmodule GithubScraper do
     """
   end
 
+#    todo GithubScraper.iterative_scrape(0,100)
+  def iterative_scrape(repositories_queried, total_repositories) when (total_repositories - repositories_queried) > 0 do
+    IO.puts("\n\n\nrecursive version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
+    repositories_arguments = "last: 1"
+    scrape(@org_name, 2, repositories_arguments)
+    iterative_scrape(repositories_queried + 50, total_repositories) # TODO: make repositories_queried right!
+  end
+
+  def iterative_scrape(repositories_queried, total_repositories) do
+    IO.puts("\n\n\nfinal version of iterative scrape. (total_repositories - repositories_queried) = #{total_repositories - repositories_queried}")
+#    repositories_arguments = "last: 1"
+#    scrape(@org_name, 2, repositories_arguments)
+  end
+
+
+
+
+
+
+
+
 
   # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN
   # defined which contains a valid github access token or this will fail
-  def scrape() do
-    query = commits_query()
+  def scrape(org_name \\ @org_name, max_branches \\ @max_edges, repositories_arguments \\ @default_repositories_arguments) do
+    query = commits_query(org_name, max_branches, repositories_arguments)
     case post_query(query) do
       {:ok, %Http.Response{status_code: 200, body: body}} ->
         body

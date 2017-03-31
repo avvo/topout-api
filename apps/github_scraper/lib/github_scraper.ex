@@ -51,6 +51,8 @@ defmodule GithubScraper do
                                   author {
                                     user {
                                       id
+                                      name
+                                      email
                                     }
                                   }
                                   id
@@ -144,8 +146,8 @@ defmodule GithubScraper do
       %{"id" => id} ->
         %ScoringApi.GithubCommit{
           commit_id: commit_id,
-          display_name: nil,
-          email: nil,
+          display_name: commit_user["name"],
+          email: commit_user["email"],
           github_id: id,
           repo: repo_name
         }

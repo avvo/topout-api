@@ -8,4 +8,8 @@ defmodule Release.Tasks do
 
     Ecto.Migrator.run(ScoringApi.Repo, path, :up, all: true)
   end
+
+  def help do
+    IO.puts("This is a task to aid in running Ecto migrations.")
+  end
 end

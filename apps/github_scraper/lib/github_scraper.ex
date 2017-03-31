@@ -9,7 +9,8 @@ defmodule GithubScraper do
   @endpoint "https://api.github.com/graphql"
   @max_edges 100
   @org_name "avvo"
-  @default_repositories_arguments "last: 5, orderBy: {field:UPDATED_AT, direction:DESC}"
+  @default_repositories_arguments "last: 10, orderBy: {field:UPDATED_AT, direction:DESC}"
+  @default_history_arguments "first: 50"
 
   defp headers(token), do: ["Authorization": "Bearer #{token}"]
 
@@ -34,7 +35,10 @@ defmodule GithubScraper do
   end
 
 #repositories(last: #{edges_cnt(10)}, orderBy: {field:UPDATED_AT, direction:DESC}) {
-  defp commits_query(org_name \\ @org_name, max_branches \\ @max_edges, repositories_arguments \\ @default_repositories_arguments) do
+  defp commits_query(org_name \\ @org_name,
+                     max_branches \\ @max_edges,
+                     repositories_arguments \\ @default_repositories_arguments,
+                     history_arguments \\ @default_history_arguments) do
     """
       {
         organization(login: "#{org_name}") {
@@ -50,7 +54,7 @@ defmodule GithubScraper do
                       node {
                         target {
                           ... on Commit {
-                            history(first: #{edges_cnt(100)}) {
+                            history(#{history_arguments}) {
                               edges {
                                 node {
                                   author {
@@ -81,13 +85,15 @@ defmodule GithubScraper do
   def iterative_scrape(repositories_queried, total_repositories) when (total_repositories - repositories_queried) > 0 do
     step_size = 1
     repositories_arguments = "first: #{step_size}"
-    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments)
+    history_arguments = "first: 100"
+    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments, history_arguments)
     iterative_scrape(repositories_queried + step_size, total_repositories, cursor)
   end
   def iterative_scrape(repositories_queried, total_repositories, cursor) when (total_repositories - repositories_queried) > 0 do
     step_size = 3
     repositories_arguments = "first: #{step_size}, after: \"#{cursor}\""
-    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments)
+    history_arguments = "first: 100"
+    {:ok, cursor} = scrape(@org_name, 2, repositories_arguments, history_arguments)
     iterative_scrape(repositories_queried + step_size, total_repositories, cursor)
   end
 
@@ -98,8 +104,8 @@ defmodule GithubScraper do
 
   # WARNING: you must have an environment variable named GITHUB_ACCESS_TOKEN
   # defined which contains a valid github access token or this will fail
-  def scrape(org_name \\ @org_name, max_branches \\ @max_edges, repositories_arguments \\ @default_repositories_arguments) do
-    query = commits_query(org_name, max_branches, repositories_arguments)
+  def scrape(org_name \\ @org_name, max_branches \\ @max_edges, repositories_arguments \\ @default_repositories_arguments, history_arguments \\ @default_history_arguments) do
+    query = commits_query(org_name, max_branches, repositories_arguments, history_arguments)
     case post_query(query) do
       {:ok, %Http.Response{status_code: 200, body: body}} ->
         body

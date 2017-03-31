@@ -18,4 +18,9 @@ defmodule ScoringApi.LeaderBoardSummaryController do
     render(conn, "index.json", leader_board_summary: leader_board_summary)
   end
 
+  def help do
+    IO.puts("Hello from the ScoringApi Leaderboard Summary Controller")
+    "The Result"
+  end
+
 end

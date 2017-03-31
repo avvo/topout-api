@@ -41,8 +41,8 @@ end
 release :topout_api do
   set version: "0.1.0"
   set applications: [
-    github_scraper: :permanent,
-    scoring_api: :permanent
+    scoring_api: :permanent,
+    github_scraper: :permanent
   ]
 end
 

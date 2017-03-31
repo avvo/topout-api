@@ -117,16 +117,13 @@ defmodule GithubScraper do
       token <- System.get_env("GITHUB_ACCESS_TOKEN"),
       {:ok, body} <- %{query: query} |> Json.encode \
     do
-      IO.puts("QUERY: #{ip query}")
       post(@endpoint, body, headers(token))
     end
   end
 
   defp report_result(result_map) do
     # TODO: convert result JSON to ScoreReport struct
-    IO.puts("RESULT: #{ip result_map}")
     {cursor, acc} = create_commits(result_map)
-    ip cursor
     ScoreReport.submit(acc)
     {:ok, cursor}
   end

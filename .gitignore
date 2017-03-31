@@ -2,7 +2,6 @@
 **/deps/
 **/doc/
 **/erl_crash.dumps
-#**/rel
 **/.secret.exs
 /tarballs
 *.tar.gz

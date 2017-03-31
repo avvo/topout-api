@@ -6,11 +6,15 @@ defmodule Release.Tasks do
 
     path = Application.app_dir(:scoring_api, "priv/repo/migrations")
 
+    IO.puts("The migration path is: #{path}")
+
     Ecto.Migrator.run(ScoringApi.Repo, path, :up, all: true)
+
+    { :ok, "Looks like it worked" }
   end
 
   def help(echo) do
-    IO.puts("Hello from the ScoringApi Leaderboard Summary Controller: #{echo}")
-    echo
+    IO.puts("About to run migrations: #{echo}")
+    { :ok, echo }
   end
 end

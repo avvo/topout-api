@@ -10,7 +10,7 @@ defmodule ScoringApi.Router do
   end
 
   pipeline :api do
-    plug Corsica, origins: "*", allow_methods: "GET"
+    plug Corsica, origins: "*"
     plug :accepts, ["json"]
   end
 

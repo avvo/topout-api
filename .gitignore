@@ -2,12 +2,13 @@
 **/deps/
 **/doc/
 **/erl_crash.dumps
-**/rel
+#**/rel
 **/.secret.exs
 /tarballs
 *.tar.gz
 .idea/
 *.iml
 
+!**/rel/hooks/post_start/release/tasks.ex
 !rel/config.exs
 .DS_Store

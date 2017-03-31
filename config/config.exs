@@ -11,7 +11,6 @@ import_config "../apps/*/config/config.exs"
 config :mix_docker, image: "avvo/topout-api"
 
 config :github_scraper, ecto_repos: []
-config :scoring_api, ecto_repos: [ScoringApi.Repo]
 
 # Sample configuration (overrides the imported configuration above):
 #

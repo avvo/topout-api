@@ -2,6 +2,10 @@
 
 set +e
 
+echo ------------------------------
+pwd
+echo ------------------------------
+
 while true; do
   nodetool ping
   EXIT_CODE=$?
@@ -14,5 +18,5 @@ done
 set -e
 
 echo "Running migrations"
-bin/scoring_api rpc Elixir.Release.Tasks migrate
+#bin/topout_api rpc Elixir.Release.Tasks migrate
 echo "Migrations run successfully"
